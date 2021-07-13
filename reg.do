@@ -166,113 +166,116 @@ xtreg fxhed_norm div_norm fxexp_norm tfe*, i(id_new) fe
 
 clear
 set more off
-**use data_dd, clear
-* For unmatched: use data_dd, clear / From propensity score matched: use data_ddpsm, clear
-xtset id datevar
-gen post_treatment = (dateaxis > 2009.75)
-gen post_treatment_treated = post_treatment * treatment
-tab dateaxis, gen(tfe)
 
-*** Renormalize the variables with the sample standard deviations
-* Net hedging from market value
-egen s_hed2 = sd(abs_net_hedging_mv)
-gen hed_norm2 = abs_net_hedging_mv / s_hed2
-* Gross hedging
-egen s_ghed2 = sd(deriv_ir_hedging)
-gen grosshed_norm2 = deriv_ir_hedging / s_ghed2
-* FX hedging
-egen s_deriv_fx_hedging2 = sd(deriv_fx_hedging)
-gen fxhed_norm2 = deriv_fx_hedging / s_deriv_fx_hedging2
-* Net worth index
-egen s_net_worth_index2 = sd(net_worth_index)
-gen nwi_norm2 = net_worth_index / s_net_worth_index2
-* Market cap / assets
-egen s_mcap_a2 = sd(mcap_a)
-gen mcapa_norm2 = mcap_a / s_mcap_a2
-* Size
-egen s_size2 = sd(size)
-gen size_norm2 = size / s_size2
-* Absgap
-egen s_absgap2 = sd(absgap)
-gen absgap_norm2 = absgap / s_absgap2
-* FX exposure
-egen s_fx_income2 = sd(fx_income)
-gen fxexp_norm2 = fx_income / s_fx_income2
-* Market cap
-egen s_logmcap2 = sd(logmcap)
-gen mcap_norm2 = logmcap / s_logmcap2
-* Net income
-egen s_net_income2 = sd(net_income)
-gen ni_norm2 = net_income / s_net_income2
-* Dividend
-gen div = dividends_quarterly/assets
-egen s_d2 = sd(div)
-gen div_norm2 = div / s_d2
-* Rating
-egen s_r2 = sd(worth_rating)
-gen r_norm2 = worth_rating / s_r2
-
-* Baseline hedging regressions
-xtreg hed_norm2 treatment post_treatment post_treatment_treated absgap_norm tfe*, fe
-xtreg  grosshed_norm2 treatment post_treatment post_treatment_treated absgap_norm tfe*, fe
-xtreg  fxhed_norm2 treatment post_treatment post_treatment_treated absgap_norm tfe*, fe
-
-* Baseline net worth regressions
-xtreg  nwi_norm2 treatment post_treatment post_treatment_treated tfe*, fe
-xtreg  mcapa_norm2 treatment post_treatment post_treatment_treated tfe*, fe
-xtreg  size_norm2 treatment post_treatment post_treatment_treated tfe*, fe
-xtreg  ni_norm2 treatment post_treatment post_treatment_treated tfe*, fe
-xtreg  div_norm2 treatment post_treatment post_treatment_treated tfe*, fe
-xtreg  mcap_norm2 treatment post_treatment post_treatment_treated tfe*, fe
-xtreg  r_norm2 treatment post_treatment post_treatment_treated tfe*, fe
-
-* Exposures
-xtreg  absgap_norm2 treatment post_treatment post_treatment_treated tfe*, fe
-xtreg  fxexp_norm2 treatment post_treatment post_treatment_treated tfe*, fe
-
-* Interacted with year dummies
-gen y2005 = (dateaxis >=2005 & dateaxis < 2006)
-gen y2006 = (dateaxis >=2006 & dateaxis < 2007)
-gen y2007 = (dateaxis >=2007 & dateaxis < 2008)
-gen y2009 = (dateaxis >=2009 & dateaxis < 2010)
-gen y2010 = (dateaxis >=2010 & dateaxis < 2011)
-gen y2011 = (dateaxis >=2011 & dateaxis < 2012)
-gen y2012 = (dateaxis >=2012 & dateaxis < 2013)
-gen y2013 = (dateaxis >=2013 & dateaxis < 2014)
-gen post_treatment_treated_2005 = treatment*y2005
-gen post_treatment_treated_2006 = treatment*y2006
-gen post_treatment_treated_2007 = treatment*y2007
-gen post_treatment_treated_2009 = treatment*y2009
-gen post_treatment_treated_2010 = treatment*y2010
-gen post_treatment_treated_2011 = treatment*y2011
-gen post_treatment_treated_2012 = treatment*y2012
-gen post_treatment_treated_2013 = treatment*y2013
-
-xtset id datevar
-xtreg hed_norm2 treatment post_treatment_treated_2* absgap_norm y20* tfe*, fe
-xtreg grosshed_norm2 treatment post_treatment_treated_2* absgap_norm y20* tfe*, fe
-xtreg fxhed_norm2 treatment post_treatment_treated_2* absgap_norm y20* tfe*, fe
-
-
-* With terciles of exposure
-gen post_treatment_treated_t2 = post_treatment_treated * qexp2
-gen post_treatment_treated_t3 = post_treatment_treated * qexp3
-
-xtreg hed_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 absgap_norm tfe*, fe
-xtreg  grosshed_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 absgap_norm tfe*, fe
-xtreg  fxhed_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 absgap_norm tfe*, fe
-
-xtreg nwi_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
-xtreg mcapa_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
-xtreg size_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
-xtreg ni_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
-xtreg div_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
-xtreg mcap_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
-xtreg r_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
-
-xtreg absgap_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
-xtreg fxexp_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
-
+foreach dataset in data_dd data_ddpsm {
+    **use data_dd, clear
+    * For unmatched: use data_dd, clear / From propensity score matched: use data_ddpsm, clear
+    use `dataset', clear
+    xtset id datevar
+    gen post_treatment = (dateaxis > 2009.75)
+    gen post_treatment_treated = post_treatment * treatment
+    tab dateaxis, gen(tfe)
+    
+    *** Renormalize the variables with the sample standard deviations
+    * Net hedging from market value
+    egen s_hed2 = sd(abs_net_hedging_mv)
+    gen hed_norm2 = abs_net_hedging_mv / s_hed2
+    * Gross hedging
+    egen s_ghed2 = sd(deriv_ir_hedging)
+    gen grosshed_norm2 = deriv_ir_hedging / s_ghed2
+    * FX hedging
+    egen s_deriv_fx_hedging2 = sd(deriv_fx_hedging)
+    gen fxhed_norm2 = deriv_fx_hedging / s_deriv_fx_hedging2
+    * Net worth index
+    egen s_net_worth_index2 = sd(net_worth_index)
+    gen nwi_norm2 = net_worth_index / s_net_worth_index2
+    * Market cap / assets
+    egen s_mcap_a2 = sd(mcap_a)
+    gen mcapa_norm2 = mcap_a / s_mcap_a2
+    * Size
+    egen s_size2 = sd(size)
+    gen size_norm2 = size / s_size2
+    * Absgap
+    egen s_absgap2 = sd(absgap)
+    gen absgap_norm2 = absgap / s_absgap2
+    * FX exposure
+    egen s_fx_income2 = sd(fx_income)
+    gen fxexp_norm2 = fx_income / s_fx_income2
+    * Market cap
+    egen s_logmcap2 = sd(logmcap)
+    gen mcap_norm2 = logmcap / s_logmcap2
+    * Net income
+    egen s_net_income2 = sd(net_income)
+    gen ni_norm2 = net_income / s_net_income2
+    * Dividend
+    gen div = dividends_quarterly/assets
+    egen s_d2 = sd(div)
+    gen div_norm2 = div / s_d2
+    * Rating
+    egen s_r2 = sd(worth_rating)
+    gen r_norm2 = worth_rating / s_r2
+    
+    * Baseline hedging regressions
+    xtreg hed_norm2 treatment post_treatment post_treatment_treated absgap_norm tfe*, fe
+    xtreg  grosshed_norm2 treatment post_treatment post_treatment_treated absgap_norm tfe*, fe
+    xtreg  fxhed_norm2 treatment post_treatment post_treatment_treated absgap_norm tfe*, fe
+    
+    * Baseline net worth regressions
+    xtreg  nwi_norm2 treatment post_treatment post_treatment_treated tfe*, fe
+    xtreg  mcapa_norm2 treatment post_treatment post_treatment_treated tfe*, fe
+    xtreg  size_norm2 treatment post_treatment post_treatment_treated tfe*, fe
+    xtreg  ni_norm2 treatment post_treatment post_treatment_treated tfe*, fe
+    xtreg  div_norm2 treatment post_treatment post_treatment_treated tfe*, fe
+    xtreg  mcap_norm2 treatment post_treatment post_treatment_treated tfe*, fe
+    xtreg  r_norm2 treatment post_treatment post_treatment_treated tfe*, fe
+    
+    * Exposures
+    xtreg  absgap_norm2 treatment post_treatment post_treatment_treated tfe*, fe
+    xtreg  fxexp_norm2 treatment post_treatment post_treatment_treated tfe*, fe
+    
+    * Interacted with year dummies
+    gen y2005 = (dateaxis >=2005 & dateaxis < 2006)
+    gen y2006 = (dateaxis >=2006 & dateaxis < 2007)
+    gen y2007 = (dateaxis >=2007 & dateaxis < 2008)
+    gen y2009 = (dateaxis >=2009 & dateaxis < 2010)
+    gen y2010 = (dateaxis >=2010 & dateaxis < 2011)
+    gen y2011 = (dateaxis >=2011 & dateaxis < 2012)
+    gen y2012 = (dateaxis >=2012 & dateaxis < 2013)
+    gen y2013 = (dateaxis >=2013 & dateaxis < 2014)
+    gen post_treatment_treated_2005 = treatment*y2005
+    gen post_treatment_treated_2006 = treatment*y2006
+    gen post_treatment_treated_2007 = treatment*y2007
+    gen post_treatment_treated_2009 = treatment*y2009
+    gen post_treatment_treated_2010 = treatment*y2010
+    gen post_treatment_treated_2011 = treatment*y2011
+    gen post_treatment_treated_2012 = treatment*y2012
+    gen post_treatment_treated_2013 = treatment*y2013
+    
+    xtset id datevar
+    xtreg hed_norm2 treatment post_treatment_treated_2* absgap_norm y20* tfe*, fe
+    xtreg grosshed_norm2 treatment post_treatment_treated_2* absgap_norm y20* tfe*, fe
+    xtreg fxhed_norm2 treatment post_treatment_treated_2* absgap_norm y20* tfe*, fe
+    
+    
+    * With terciles of exposure
+    gen post_treatment_treated_t2 = post_treatment_treated * qexp2
+    gen post_treatment_treated_t3 = post_treatment_treated * qexp3
+    
+    xtreg hed_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 absgap_norm tfe*, fe
+    xtreg  grosshed_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 absgap_norm tfe*, fe
+    xtreg  fxhed_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 absgap_norm tfe*, fe
+    
+    xtreg nwi_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
+    xtreg mcapa_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
+    xtreg size_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
+    xtreg ni_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
+    xtreg div_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
+    xtreg mcap_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
+    xtreg r_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
+    
+    xtreg absgap_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
+    xtreg fxexp_norm2 treatment post_treatment post_treatment_treated post_treatment_treated_t2 post_treatment_treated_t3 tfe*, fe
+}
 * With housing supply elasticity
 clear
 set more off
