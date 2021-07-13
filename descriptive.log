@@ -1,0 +1,874 @@
+
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   16.1   Copyright 1985-2019 StataCorp LLC
+  Statistics/Data analysis            StataCorp
+                                      4905 Lakeway Drive
+     MP - Parallel Edition            College Station, Texas 77845 USA
+                                      800-STATA-PC        https://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
+
+Stata license: 5-user 8-core network perpetual
+Serial number: 501606316764
+  Licensed to: LDI Econ Cornell University
+               Ithaca, NY
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000; see help set_maxvar.
+
+. do descriptive.do 
+
+. ***** TABLE I ***************************************************
+. 
+. clear
+
+. set more off
+
+. use data_descriptive
+
+. 
+. * Net IR hedging
+. sum net_hedging_mv, d
+
+                       net_hedging_mv
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     -.798528       -.798528
+ 5%     -.798528       -.798528
+10%     -.182973       -.798528       Obs              19,832
+25%            0       -.798528       Sum of Wgt.      19,832
+
+50%            0                      Mean           .0165769
+                        Largest       Std. Dev.       .325926
+75%            0       .9866258
+90%     .2369217       .9866258       Variance       .1062278
+95%     .9866258       .9866258       Skewness       .6355666
+99%     .9866258       .9866258       Kurtosis       6.771345
+
+. egen nirh_98 = pctile(net_hedging_mv), p(98)
+
+. 
+. * Gross IR hedging
+. sum deriv_ir_hedging, d
+
+        Total gross notional amount of interest rate
+             derivative contracts held for purpo
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              22,723
+25%            0              0       Sum of Wgt.      22,723
+
+50%     .0005014                      Mean           .0391868
+                        Largest       Std. Dev.       .088616
+75%     .0340113       .5707167
+90%      .119636       .5707167       Variance       .0078528
+95%     .2030446       .5707167       Skewness       3.773081
+99%     .5703164       .5707167       Kurtosis       19.59009
+
+. egen girh_98 = pctile(deriv_ir_hedging), p(98)
+
+. 
+. * Gross FX hedging
+. sum deriv_fx_hedging, d
+
+       Total gross notional amount of foreign exchange
+              derivative contracts held for pu
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              22,707
+25%            0              0       Sum of Wgt.      22,707
+
+50%            0                      Mean           .0010508
+                        Largest       Std. Dev.      .0087226
+75%            0       .2357923
+90%            0       .2367798       Variance       .0000761
+95%     .0017821       .2490822       Skewness       16.97553
+99%     .0264461       .2532921       Kurtosis       361.9462
+
+. egen gfxh_98 = pctile(deriv_fx_hedging), p(98)
+
+. 
+. * Gross IR trading
+. sum deriv_ir_trading, d
+
+        Total gross notional amount of interest rate
+             derivative contracts held for tradi
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              22,723
+25%            0              0       Sum of Wgt.      22,723
+
+50%            0                      Mean           .0317848
+                        Largest       Std. Dev.       .161119
+75%            0       1.335728
+90%     .0194859       1.335728       Variance       .0259593
+95%     .1101191       1.335728       Skewness       6.696284
+99%     1.217913       1.335728       Kurtosis       50.11616
+
+. egen girt_98 = pctile(deriv_ir_trading), p(98)
+
+. 
+. * Gross FX trading
+. sum deriv_fx_trading, d
+
+       Total gross notional amount of foreign exchange
+              derivative contracts held for tr
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              22,723
+25%            0              0       Sum of Wgt.      22,723
+
+50%            0                      Mean           .0123223
+                        Largest       Std. Dev.      .0983731
+75%            0       1.097615
+90%            0       1.097615       Variance       .0096773
+95%     .0105072       1.097615       Skewness       9.820391
+99%     .4839413       1.097615       Kurtosis       102.6357
+
+. egen gfxt_98 = pctile(deriv_fx_trading), p(98)
+
+. 
+. * Maturity gap
+. sum gap, d
+
+                             gap
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%    -.3725416      -7.761219
+ 5%    -.1961985      -7.207964
+10%    -.1200814      -.7382556       Obs              22,699
+25%    -.0110449      -.6330624       Sum of Wgt.      22,699
+
+50%     .0914291                      Mean             .09427
+                        Largest       Std. Dev.      .1919017
+75%     .2052139       .8518372
+90%     .3167097       .8524804       Variance       .0368263
+95%     .3841704       .8567732       Skewness      -5.400237
+99%     .5386699       .8639732       Kurtosis       219.0628
+
+. egen gap_98 = pctile(gap), p(98)
+
+. 
+. * FX exposure
+. sum fx_income, d
+
+                          fx_income
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              19,286
+25%            0              0       Sum of Wgt.      19,286
+
+50%            0                      Mean           .0066709
+                        Largest       Std. Dev.      .0457113
+75%            0        .694595
+90%            0       .6980361       Variance       .0020895
+95%     .0055075       .7039027       Skewness       9.584602
+99%     .2222021       .7107219       Kurtosis       107.5027
+
+. egen fxi_98 = pctile(fx_income), p(98)
+
+. 
+. 
+. 
+. ***** TABLE AII ***************************************************
+. 
+. clear
+
+. set more off
+
+. use data_descriptive
+
+. replace dividends_assets = dividends_quarterly / assets
+(20,715 real changes made)
+
+. replace mcap = log(mcap)
+(22,723 real changes made)
+
+. 
+. sum size, d
+
+                            size
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     13.15164       13.12245
+ 5%     13.24436       13.12259
+10%     13.34799       13.12271       Obs              22,723
+25%     13.70007       13.12278       Sum of Wgt.      22,723
+
+50%      14.3812                      Mean           14.74883
+                        Largest       Std. Dev.      1.361423
+75%     15.47698       20.37671
+90%     16.69635       20.39465       Variance       1.853472
+95%     17.63086       20.44113       Skewness       1.190465
+99%      18.9746       20.47851       Kurtosis       4.046697
+
+. sum mcap, d 
+
+                            mcap
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     9.562784       7.633084
+ 5%     10.49552       7.812358
+10%     10.90916       7.959465       Obs              22,723
+25%     11.55167       8.003736       Sum of Wgt.      22,723
+
+50%     12.39138                      Mean           12.66594
+                        Largest       Std. Dev.      1.617134
+75%      13.6025       18.39224
+90%     14.86133       18.40108       Variance       2.615122
+95%     15.85759       18.46922       Skewness        .711946
+99%     17.21845       18.55645       Kurtosis        3.50578
+
+. sum mcap_a, d
+
+                           mcap_a
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0129321       .0030635
+ 5%     .0361116       .0030635
+10%     .0578996       .0030635       Obs              22,723
+25%     .0964991       .0030635       Sum of Wgt.      22,723
+
+50%     .1336078                      Mean           .1354455
+                        Largest       Std. Dev.      .0602096
+75%     .1710809       .4400066
+90%     .2096194       .4567719       Variance       .0036252
+95%     .2371553         .52171       Skewness        .466009
+99%     .2968892         .52171       Kurtosis       4.016937
+
+. sum net_income, d
+
+        Net income (loss), normalized by total assets
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     -.043746      -.1010639
+ 5%    -.0084228      -.1010639
+10%     .0008606      -.1010639       Obs              20,704
+25%      .006223      -.1010639       Sum of Wgt.      20,704
+
+50%     .0097329                      Mean           .0077092
+                        Largest       Std. Dev.       .010749
+75%     .0124603       .0368985
+90%     .0152149       .0373825       Variance       .0001155
+95%     .0170719       .0373825       Skewness       -4.00109
+99%     .0214308       .0373825       Kurtosis       26.80914
+
+. sum dividends_assets, d
+
+                      dividends_assets
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0      -.0010968
+ 5%            0      -.0009823
+10%            0       -.000918       Obs              22,426
+25%      .000408      -.0009121       Sum of Wgt.      22,426
+
+50%      .000875                      Mean           .0009153
+                        Largest       Std. Dev.      .0008042
+75%     .0013128        .025548
+90%     .0017228       .0285448       Variance       6.47e-07
+95%     .0020121       .0334802       Skewness       13.10152
+99%     .0027006        .040215       Kurtosis       506.4518
+
+. sum rating, d
+
+                           rating
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            9              4
+ 5%           12              4
+10%           13              4       Obs               3,579
+25%           14              4       Sum of Wgt.       3,579
+
+50%           15                      Mean           15.19335
+                        Largest       Std. Dev.      2.065596
+75%           17             20
+90%           18             20       Variance       4.266686
+95%           18             20       Skewness      -.7436563
+99%           19             20       Kurtosis       5.593619
+
+. sum net_worth_index, d
+
+                   Scores for component 1
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%    -3.957551      -7.032887
+ 5%     -2.23275      -7.032887
+10%     -1.66076      -7.032887       Obs              20,568
+25%    -.8352925      -7.032887       Sum of Wgt.      20,568
+
+50%     .0299346                      Mean          -.0022065
+                        Largest       Std. Dev.      1.388272
+75%     .8766074       4.496035
+90%     1.677674       4.936306       Variance         1.9273
+95%     2.225139       4.936306       Skewness      -.3352564
+99%     3.218982       4.936306       Kurtosis       4.168986
+
+. sum net_worth_index_nosize, d
+
+                   Scores for component 1
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%    -4.091647      -7.381804
+ 5%     -2.18425      -7.381804
+10%    -1.596816      -7.381804       Obs              20,568
+25%    -.7820399      -7.381804       Sum of Wgt.      20,568
+
+50%     .0684651                      Mean          -.0013059
+                        Largest       Std. Dev.      1.352902
+75%     .8346771       4.354827
+90%     1.566092       4.450755       Variance       1.830345
+95%     2.086326       4.450755       Skewness        -.52936
+99%     3.082361       4.450755       Kurtosis       4.756824
+
+. sum regcap_rwa, d
+
+                         regcap_rwa
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0921118       .0031732
+ 5%     .1048217       .0031732
+10%     .1091974       .0031732       Obs              21,776
+25%     .1179916       .0031732       Sum of Wgt.      21,776
+
+50%     .1328256                      Mean           .1398414
+                        Largest       Std. Dev.       .033437
+75%     .1528639       .4094763
+90%      .177973       .4094763       Variance        .001118
+95%     .1979844       .5353869       Skewness       2.216344
+99%       .27071       .6579365       Kurtosis       14.00509
+
+. sum tier1_rwa, d
+
+                          tier1_rwa
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%      .068272       .0015866
+ 5%      .081232       .0015866
+10%     .0901792       .0015866       Obs              21,776
+25%     .1016658       .0015866       Sum of Wgt.      21,776
+
+50%     .1175495                      Mean           .1237381
+                        Largest       Std. Dev.      .0352003
+75%     .1380887       .4090576
+90%     .1642466       .4090576       Variance       .0012391
+95%     .1845208       .5352897       Skewness       2.000028
+99%     .2565798       .6545846       Kurtosis       12.76792
+
+. 
+. * Foreign exchange exposure
+. sum fx_income, d
+
+                          fx_income
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              19,286
+25%            0              0       Sum of Wgt.      19,286
+
+50%            0                      Mean           .0066709
+                        Largest       Std. Dev.      .0457113
+75%            0        .694595
+90%            0       .6980361       Variance       .0020895
+95%     .0055075       .7039027       Skewness       9.584602
+99%     .2222021       .7107219       Kurtosis       107.5027
+
+. 
+. * Maturity gap
+. drop if gap < -1
+(2 observations deleted)
+
+. sum gap, d
+
+                             gap
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%    -.3721099      -.7382556
+ 5%    -.1957633      -.6330624
+10%    -.1200374      -.6131909       Obs              22,697
+25%    -.0108851      -.6115247       Sum of Wgt.      22,697
+
+50%     .0914482                      Mean           .0949378
+                        Largest       Std. Dev.      .1782154
+75%     .2052139       .8518372
+90%     .3167097       .8524804       Variance       .0317607
+95%     .3841704       .8567732       Skewness       .0503134
+99%     .5386699       .8639732       Kurtosis       4.005828
+
+. drop if missing(gap)
+(24 observations deleted)
+
+. 
+. * Earning assets $<$~1~yr. (bhck3197)
+. sum bhck3197, d
+
+                          BHCK3197
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0756961       5.60e-06
+ 5%     .1554202       .0000114
+10%     .1967471       .0000154       Obs              22,697
+25%     .2824081       .0000234       Sum of Wgt.      22,697
+
+50%     .3844289                      Mean           .3840164
+                        Largest       Std. Dev.      .1446949
+75%     .4796196       .9507167
+90%     .5646414       .9535741       Variance       .0209366
+95%     .6245326       .9551583       Skewness       .1891452
+99%     .7348865        .969733       Kurtosis        3.15546
+
+. 
+. * Interest-bearing deposits (bhck3296)
+. sum bhck3296, d
+
+                          BHCK3296
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0004636              0
+ 5%     .0827958              0
+10%     .1163572              0       Obs              22,697
+25%      .175225              0       Sum of Wgt.      22,697
+
+50%      .248679                      Mean           .2769912
+                        Largest       Std. Dev.      .1463526
+75%     .3536509       .8068737
+90%     .5003428        .809848       Variance       .0214191
+95%     .5732517       .8174703       Skewness       .7913134
+99%     .6771573       .8241473       Kurtosis       3.317903
+
+. 
+. * Repricing long-term debt (bhck3298)
+. sum bhck3298, d
+
+                          BHCK3298
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              22,697
+25%            0              0       Sum of Wgt.      22,697
+
+50%            0                      Mean            .011572
+                        Largest       Std. Dev.      .0259945
+75%     .0100371       .2679351
+90%      .039175       .2732417       Variance       .0006757
+95%     .0644975       .3194291       Skewness       3.541749
+99%     .1286167       .3637151       Kurtosis       19.50115
+
+. 
+. * Maturing long-term debt (bhck3409)
+. sum bhck3409, d
+
+                          BHCK3409
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              22,697
+25%            0              0       Sum of Wgt.      22,697
+
+50%            0                      Mean           .0003647
+                        Largest       Std. Dev.       .002653
+75%            0       .0702631
+90%            0       .0785038       Variance       7.04e-06
+95%     .0012209       .0933772       Skewness       18.33941
+99%     .0091518       .1363529       Kurtosis       556.7428
+
+. 
+. * Variable-rate pref.\ stock (bhck3408)
+. sum bhck3408, d
+
+                          BHCK3408
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              22,697
+25%            0              0       Sum of Wgt.      22,697
+
+50%            0                      Mean           .0001507
+                        Largest       Std. Dev.      .0016481
+75%            0       .0331586
+90%            0       .0375702       Variance       2.72e-06
+95%            0       .0395422       Skewness       13.97292
+99%     .0034254       .0403934       Kurtosis       217.8213
+
+. 
+. * Commercial paper (bhck2309)
+. sum bhck2309, d
+
+                          BHCK2309
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              22,697
+25%            0              0       Sum of Wgt.      22,697
+
+50%            0                      Mean           .0010476
+                        Largest       Std. Dev.      .0064912
+75%            0       .1370702
+90%            0       .1442524       Variance       .0000421
+95%     .0044171       .1482114       Skewness       11.69254
+99%     .0249224       .1489545       Kurtosis       180.0879
+
+. 
+. * Fed funds and repo (bhdmb993 + bhckb995)
+. gen fed = bhdmb993 + bhckb995
+
+. sum fed, d
+
+                             fed
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              22,697
+25%            0              0       Sum of Wgt.      22,697
+
+50%      .005255                      Mean           .0257664
+                        Largest       Std. Dev.        .04536
+75%     .0373832       .6258817
+90%      .075023       .6339059       Variance       .0020575
+95%     .1045652       .6357079       Skewness       4.335318
+99%     .1882696        .653253       Kurtosis       36.00908
+
+. 
+. * Other borrowed money (bhck2332)
+. sum bhck2332, d
+
+                          BHCK2332
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              22,697
+25%     .0026267              0       Sum of Wgt.      22,697
+
+50%     .0166437                      Mean           .0299473
+                        Largest       Std. Dev.      .0387806
+75%     .0419271       .3700482
+90%     .0781787        .373243       Variance       .0015039
+95%     .1082777       .3799367       Skewness       2.404861
+99%     .1804954        .381677       Kurtosis       11.42434
+
+. 
+. * Non int.-bearing assets (non_ib_assets)
+. sum non_ib_assets, d
+
+                        non_ib_assets
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0034455       .0001599
+ 5%     .0080451       .0002599
+10%     .0110224       .0002805       Obs              22,697
+25%     .0164507       .0004154       Sum of Wgt.      22,697
+
+50%      .024266                      Mean           .0272631
+                        Largest       Std. Dev.      .0159053
+75%     .0345459       .1869408
+90%      .046626       .2038513       Variance        .000253
+95%     .0555892       .2133946       Skewness       1.896633
+99%     .0814718       .2283626       Kurtosis       11.66672
+
+. 
+. * Non int.-bearing deposits (deposits_non_ib)
+. sum deposits_non_ib, d
+
+       Interest bearing demand deposits (normalized by
+                        total assets)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0105846              0
+ 5%     .0299527              0
+10%     .0453856              0       Obs              22,697
+25%     .0768195              0       Sum of Wgt.      22,697
+
+50%     .1113756                      Mean           .1200384
+                        Largest       Std. Dev.      .0668333
+75%     .1495816       .6160035
+90%     .2017834       .6582102       Variance       .0044667
+95%     .2433981       .6825271       Skewness       1.455395
+99%     .3326631       .6966863       Kurtosis       7.972679
+
+. 
+. * Total loans/ Assets (loans)
+. sum loans, d
+
+       Loans secured by automobile(normalized by total
+                           assets)
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .3317936       .2002032
+ 5%     .4575039       .2003722
+10%     .5201273       .2015755       Obs              22,697
+25%      .602718        .201638       Sum of Wgt.      22,697
+
+50%     .6757208                      Mean            .664958
+                        Largest       Std. Dev.       .112349
+75%     .7401098       .9548914
+90%     .7983788       .9551714       Variance       .0126223
+95%     .8327657        .959251       Skewness      -.6652192
+99%      .885046       .9621134       Kurtosis       3.901814
+
+. 
+. * Real estate loans/ Asset (bhck1410)
+. sum bhck1410, d
+
+                          BHCK1410
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .0543773              0
+ 5%     .2234716              0
+10%     .2829693              0       Obs              22,697
+25%     .3750281              0       Sum of Wgt.      22,697
+
+50%     .4761434                      Mean           .4706973
+                        Largest       Std. Dev.      .1498249
+75%     .5765742       .8812405
+90%     .6555095        .882432       Variance       .0224475
+95%      .704294       .8960547       Skewness      -.2581187
+99%     .8072463       .9102617       Kurtosis       3.229737
+
+. 
+. * Real estate loans 2008Q4/ Assets (bhck1410)
+. keep if dateaxis==2008.75
+(22,373 observations deleted)
+
+. sum bhck1410, d
+
+                          BHCK1410
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     .1533229       .0560667
+ 5%     .3201443       .1118631
+10%     .3880501       .1299512       Obs                 324
+25%     .4608538       .1533229       Sum of Wgt.         324
+
+50%     .5625614                      Mean           .5522358
+                        Largest       Std. Dev.      .1385021
+75%     .6482058       .8591009
+90%     .7184539       .8597715       Variance       .0191828
+95%     .7551947       .8785091       Skewness      -.4367452
+99%     .8591009       .9102617       Kurtosis       3.575328
+
+. 
+. ******** Correlation between net worth measures
+. 
+. 
+. pwcorr size mcap mcap_a net_income dividends_assets rating net_worth_index ne
+> t_worth_index_nosize regcap_rwa tier1_rwa
+
+             |     size     mcap   mcap_a net_in~e divide~s   rating net_wo~x
+-------------+---------------------------------------------------------------
+        size |   1.0000 
+        mcap |   0.8502   1.0000 
+      mcap_a |   0.1528   0.6032   1.0000 
+  net_income |  -0.0279   0.2969   0.4964   1.0000 
+dividends_~s |   0.1994   0.4668   0.6084   0.3599   1.0000 
+      rating |   0.6643   0.8211   0.1986   0.1789   0.2248   1.0000 
+net_worth_~x |   0.2792   0.6541   0.8057   0.8285   0.6928   0.3565   1.0000 
+net_worth_~e |   0.1159   0.5274   0.7952   0.8747   0.6674   0.2427   0.9851 
+  regcap_rwa |   0.1625   0.3524   0.3744   0.3273   0.2541   0.0843   0.3950 
+   tier1_rwa |  -0.0242   0.2390   0.4262   0.3800   0.2728  -0.1565   0.4088 
+
+             | net_wo~e regcap~a tier1_~a
+-------------+---------------------------
+net_worth_~e |   1.0000 
+  regcap_rwa |   0.3806   1.0000 
+   tier1_rwa |   0.4265   0.9372   1.0000 
+
+. 
+. 
+. ***** FIGURE 1 and B1 ***************************************************
+. 
+. 
+. * Net worth index with red bar
+. clear
+
+. set more off
+
+. use data_decomposition
+
+. sort dateaxis
+
+. gen q=dateaxis
+
+. egen median = median(net_worth_index), by(q)
+(695 missing values generated)
+
+. egen upq = pctile(net_worth_index), p(75) by(q)
+(695 missing values generated)
+
+. egen loq = pctile(net_worth_index), p(25) by(q)
+(695 missing values generated)
+
+. egen upper = pctile(net_worth_index), p(95) by(q)
+(695 missing values generated)
+
+. egen lower = pctile(net_worth_index), p(5) by(q)
+(695 missing values generated)
+
+. egen mean = mean(net_worth_index), by(q)
+(695 missing values generated)
+
+. label var q "Time"
+
+. local max=4
+
+. local min=-4.5
+
+. gen cmax=`max' if dateaxis>2008.75 & dateaxis<2010
+(21,421 missing values generated)
+
+. gen cmin=`min' if dateaxis>2008.75 & dateaxis<2010
+(21,421 missing values generated)
+
+. #delimit ;
+delimiter now ;
+. twoway area cmax dateaxis, bcolor(cranberry) ||
+> area cmin dateaxis, bcolor(cranberry) ||
+> rbar med upq q, pstyle(p1) blcolor(gs15) bfcolor(gs8) barw(0.35) ||
+> rbar med loq q, pstyle(p1) blcolor(gs15) bfcolor(gs8) barw(0.35) ||
+> rspike upq upper q, pstyle(p1) ||
+> rspike loq lower q, pstyle(p1) ||
+> rcap upper upper q, pstyle(p1) msize(*2) ||
+> rcap lower lower q, pstyle(p1) msize(*2) ||
+> rcap med med q, pstyle(p1) msize(*1.6) lcolor(gs3) lwidth(0.5) ||
+> scatter mean q, ms(Dh) msize(*1) mcolor(black) mlwidth(medthin) graphregion(c
+> olor(white))
+> legend(off)
+> ytitle("Net worth index")
+> xtitle("")
+> title("Net worth index")
+> ;
+
+. #delimit cr
+delimiter now cr
+. 
+. *Net worth index (excluding size)
+. clear
+
+. set more off
+
+. use data_decomposition
+
+. sort dateaxis
+
+. gen q=dateaxis
+
+. egen median = median(net_worth_index_nosize), by(q)
+(695 missing values generated)
+
+. egen upq = pctile(net_worth_index_nosize), p(75) by(q)
+(695 missing values generated)
+
+. egen loq = pctile(net_worth_index_nosize), p(25) by(q)
+(695 missing values generated)
+
+. egen upper = pctile(net_worth_index_nosize), p(95) by(q)
+(695 missing values generated)
+
+. egen lower = pctile(net_worth_index_nosize), p(5) by(q)
+(695 missing values generated)
+
+. egen mean = mean(net_worth_index_nosize), by(q)
+(695 missing values generated)
+
+. label var q "Time"
+
+. #delimit ;
+delimiter now ;
+. twoway rbar med upq q, pstyle(p1) blcolor(gs15) bfcolor(gs8) barw(0.35) ||
+> rbar med loq q, pstyle(p1) blcolor(gs15) bfcolor(gs8) barw(0.35) ||
+> rspike upq upper q, pstyle(p1) ||
+> rspike loq lower q, pstyle(p1) ||
+> rcap upper upper q, pstyle(p1) msize(*2) ||
+> rcap lower lower q, pstyle(p1) msize(*2) ||
+> rcap med med q, pstyle(p1) msize(*1.6) lcolor(gs3) lwidth(0.5) ||
+> scatter mean q, ms(Dh) msize(*1) mcolor(black) mlwidth(medthin) graphregion(c
+> olor(white))
+> legend(off)
+> ytitle("Net worth index (excl. size)")
+> xtitle("")
+> title("Net worth index (excl. size)")
+> ;
+
+. #delimit cr 
+delimiter now cr
+. 
+. * Market value of equity over assets
+. clear
+
+. set more off
+
+. use data_decomposition
+
+. sort dateaxis
+
+. gen q=dateaxis
+
+. egen median = median(mcap_a), by(q)
+
+. egen upq = pctile(mcap_a), p(75) by(q)
+
+. egen loq = pctile(mcap_a), p(25) by(q)
+
+. egen upper = pctile(mcap_a), p(95) by(q)
+
+. egen lower = pctile(mcap_a), p(5) by(q)
+
+. egen mean = mean(mcap_a), by(q)
+
+. label var q "Time"
+
+. #delimit ;
+delimiter now ;
+. twoway rbar med upq q, pstyle(p1) blcolor(gs15) bfcolor(gs8) barw(0.35) ||
+> rbar med loq q, pstyle(p1) blcolor(gs15) bfcolor(gs8) barw(0.35) ||
+> rspike upq upper q, pstyle(p1) ||
+> rspike loq lower q, pstyle(p1) ||
+> rcap upper upper q, pstyle(p1) msize(*2) ||
+> rcap lower lower q, pstyle(p1) msize(*2) ||
+> rcap med med q, pstyle(p1) msize(*1.6) lcolor(gs3) lwidth(0.5) ||
+> scatter mean q, ms(Dh) msize(*1) mcolor(black) mlwidth(medthin) graphregion(c
+> olor(white))
+> legend(off)
+> ytitle("Market capitalization / Assets")
+> xtitle("")
+> title("Market capitalization / Assets")
+> ;
+
+. #delimit cr
+delimiter now cr
+. 
+. * Size
+. clear
+
+. set more off
+
+. use data_decomposition
+
+. sort dateaxis
+
+. drop q
+variable q not found
+r(111);
+
+end of do-file
+r(111);
